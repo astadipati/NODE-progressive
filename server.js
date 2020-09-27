@@ -12,15 +12,32 @@ const todos = [
 ];
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('X-Powered-By', 'Node.js');
-  res.end(
-    JSON.stringify({
-      success: true,
-      data: todos,
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'X-Powered-By': 'Node.js',
+  });
+
+  let body = [];
+
+  req
+    .on('data', (chunk) => {
+      body.push(chunk);
     })
-  );
+    .on('end', () => {
+      body = Buffer.concat(body).toString();
+      console.log(body);
+    });
 });
+// const server = http.createServer((req, res) => {
+//   res.setHeader('Content-Type', 'application/json');
+//   res.setHeader('X-Powered-By', 'Node.js');
+//   res.end(
+//     JSON.stringify({
+//       success: true,
+//       data: todos,
+//     })
+//   );
+// });
 
 const app = express();
 
